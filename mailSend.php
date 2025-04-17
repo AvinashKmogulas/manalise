@@ -11,13 +11,24 @@ require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $name     = $_POST['name'] ?? '';
-    $phone    = $_POST['phone'] ?? '';
-    $checkin  = $_POST['checkin'] ?? '';
-    $checkout = $_POST['checkout'] ?? '';
-    $rooms    = $_POST['rooms'] ?? '';
-    $adults   = $_POST['adults'] ?? '';
-    $children = $_POST['children'] ?? '';
+    $flag = $_POST['flag'] ?? '';
+    if (isset($_POST['flag']) && $_POST['flag'] == 'bookingEngine') {
+        $name     = $_POST['name'] ?? '';
+        $phone    = $_POST['phone'] ?? '';
+        $checkin  = $_POST['checkin'] ?? '';
+        $checkout = $_POST['checkout'] ?? '';
+        $rooms    = $_POST['rooms'] ?? '';
+        $adults   = $_POST['adults'] ?? '';
+        $children = $_POST['children'] ?? '';
+    } elseif (isset($_POST['flag']) && $_POST['flag'] == 'eventForm') {
+        $name     = $_POST['name'] ?? '';
+        $phone    = $_POST['phone'] ?? '';
+        $email  = $_POST['email'] ?? '';
+        $event_type = $_POST['event_type'] ?? '';
+        $people    = $_POST['people'] ?? '';
+        $event_date   = $_POST['event_date'] ?? '';
+        $message = $_POST['message'] ?? '';
+    }
 
     $mail = new PHPMailer(true);
 
@@ -32,45 +43,63 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $mail->Port       = 587;
 
         // Sender & Receiver
-        $mail->setFrom('avinash.mogulas@gmail.com', 'Booking Enquiry in Mohali-Se');
-        $mail->addAddress('avinash8564kumar@gmail.com', 'Admin');
+
+        switch ($flag) {
+            case 'bookingEngine':
+                $toEmail = 'avinash8564kumar@gmail.com';
+                $toName = 'Admin';
+                $fromEmail = 'avinash.mogulas@gmail.com';
+                $fromName = 'Booking Enquiry in Mohali-Se';
+                $subject = 'New Booking Enquiry';
+                $fields = [
+                    'Name' => $name,
+                    'Phone' => $phone,
+                    'Check-in' => $checkin,
+                    'Check-out' => $checkout,
+                    'Rooms' => $rooms,
+                    'Adults' => $adults,
+                    'Children' => $children,
+                ];
+                break;
+            case 'eventForm':
+                $toEmail = 'avinash8564kumar@gmail.com';
+                $toName = 'Admin';
+                $fromEmail = 'avinash.mogulas@gmail.com';
+                $fromName = 'Event Enquiry in Mohali-Se';
+                $subject = 'New Event Enquiry';
+                $fields = [
+                    'Name' => $name,
+                    'Phone' => $phone,
+                    'Email' => $email,
+                    'Event Type' => $event_type,
+                    'No Of Guest' => $people,
+                    'Event Data' => $event_date,
+                    'Message' => $message,
+                ];
+                break;
+            default:
+                echo json_encode(['status' => 'error', 'message' => 'Invalid Form Submit Request']);
+                exit;
+        }
+
+        $mail->setFrom($fromEmail, $fromName);
+        $mail->addAddress($toEmail, $toName);
 
         // Email Content
         $mail->isHTML(true);
-        $mail->Subject = 'New Booking Enquiry';
-        $mail->Body    = "
-    <h2>New Enquiry</h2>
-    <table border='1' cellpadding='10' cellspacing='0' style='border-collapse: collapse; width: 100%;'>
+        $mail->Subject = $subject;
+        $body = "<h2>$subject</h2>";
+        $body .= "<table border='1' cellpadding='10' cellspacing='0' style='border-collapse: collapse; width: 100%;'>";
+        foreach ($fields as $key => $value) {
+            $body .= "
         <tr>
-            <th style='background-color: #f2f2f2;'>Name</th>
-            <td>$name</td>
-        </tr>
-        <tr>
-            <th style='background-color: #f2f2f2;'>Phone</th>
-            <td>$phone</td>
-        </tr>
-        <tr>
-            <th style='background-color: #f2f2f2;'>Check-in</th>
-            <td>$checkin</td>
-        </tr>
-        <tr>
-            <th style='background-color: #f2f2f2;'>Check-out</th>
-            <td>$checkout</td>
-        </tr>
-        <tr>
-            <th style='background-color: #f2f2f2;'>Rooms</th>
-            <td>$rooms</td>
-        </tr>
-        <tr>
-            <th style='background-color: #f2f2f2;'>Adults</th>
-            <td>$adults</td>
-        </tr>
-        <tr>
-            <th style='background-color: #f2f2f2;'>Children</th>
-            <td>$children</td>
-        </tr>
-    </table>
-";
+            <th style='background-color: #f2f2f2;'>$key</th>
+            <td>$value</td>
+        </tr>";
+        }
+        $body .= "</table>";
+
+        $mail->Body = $body;
 
         $mail->send();
         echo json_encode(['status' => 'success']);
