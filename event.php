@@ -57,7 +57,7 @@
     <script>
         $("document").ready(function() {
             let scriptUrl =
-                "https://script.google.com/macros/s/AKfycbxndQqts44fnZvpVC75bTUl_Lg4XpTyi8EZS_NQsH1FL-gghVfjz_Cq8jJKIYhCj2BqqQ/exec";
+                "https://script.google.com/macros/s/AKfycbzSHRxS4YdZS4NYxx0hFYQxSFYBUt-dWVZIvNFsy-m0HJOSfetON9Cs3BW0A3Jt4lz3kA/exec";
             let eventForm = document.forms["eventform"];
             // event form submission
             eventForm.addEventListener("submit", (e) => {
@@ -79,7 +79,7 @@
                     email == "" ||
                     event_type == "" ||
                     people == "" ||
-                    // event_date == "" ||
+                    event_date == "" ||
                     message == ""
                 ) {
                     alert("Please fill all required fields");
@@ -115,15 +115,7 @@
             });
 
             // Function to send event email
-            function sendEventMail(
-                name,
-                phone,
-                email,
-                event_type,
-                people,
-                event_date,
-                message
-            ) {
+            function sendEventMail(name, phone, email, event_type, people, event_date, message) {
                 $.ajax({
                     url: "mailSend.php",
                     method: "POST",
