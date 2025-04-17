@@ -73,16 +73,35 @@
                 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                 let RegEx = /^[a-zA-Z][a-zA-Z ]+$/;
                 let RegPhNo = /^[0-9,()-]{1,50}$/;
-                if (
-                    name == "" ||
-                    phone == "" ||
-                    email == "" ||
-                    event_type == "" ||
-                    people == "" ||
-                    event_date == "" ||
-                    message == ""
-                ) {
-                    alert("Please fill all required fields");
+                
+                if(name == ""){
+                    alert("Please enter Name");
+                    return;
+                } 
+
+                if(phone == ""){
+                    alert("Please enter Phone Number");
+                    return;
+                }
+
+                if(email == ""){
+                    alert("Please enter Email Id");
+                    return;
+                }
+                if(event_type == "Please Select"){
+                    alert("Please select Event Type");
+                    return;
+                }
+                if(people == ""){
+                    alert("Please enter Number of People");
+                    return;
+                }
+                if(event_date == ""){
+                    alert("Please select Event Date");
+                    return;
+                }
+                if(message == ""){
+                    alert("Please enter Message");
                     return;
                 }
 
@@ -132,8 +151,8 @@
                     },
                     success: function(response) {
                         if (response.status === "success") {
-                            alert("Form submitted successfully!");
                             $("#bookinghotelform")[0].reset();
+                            window.location.href = "";
                         } else {
                             alert("Mailer Error: " + response.message);
                         }
