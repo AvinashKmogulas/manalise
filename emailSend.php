@@ -34,6 +34,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email  = $_POST['email'] ?? '';
         $offer = $_POST['offer'] ?? '';
         $message = $_POST['message'] ?? '';
+    } else if (isset($_POST['flag']) && $_POST['flag'] == 'contactForm') {
+        $name     = $_POST['name'] ?? '';
+        $phone    = $_POST['phone'] ?? '';
+        $email  = $_POST['email'] ?? '';
+        $subject = $_POST['subject'] ?? '';
+        $message = $_POST['message'] ?? '';
     }
 
     $mail = new PHPMailer(true);
@@ -89,6 +95,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     'Phone' => $phone,
                     'Email' => $email,
                     'Offer' => $offer,
+                    'Message' => $message,
+                ];
+                break;
+            case 'contactForm':
+                $toEmail = 'avinash8564kumar@gmail.com';  // replace with your email if multiple recipients then add their emails sperate with comma
+                $fromEmail = 'avinash.mogulas@gmail.com'; // replace with your email
+                $fromName = 'Contact Enquiry in Mohali-Se';
+                $subject = $subject;
+                $fields = [
+                    'Name' => $name,
+                    'Phone' => $phone,
+                    'Email' => $email,
+                    'Subject' => $subject,
                     'Message' => $message,
                 ];
                 break;

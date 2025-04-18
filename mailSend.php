@@ -23,12 +23,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $people    = $_POST['people'] ?? '';
         $event_date   = $_POST['event_date'] ?? '';
         $message = $_POST['message'] ?? '';
-    }else if(isset($_POST['flag']) && $_POST['flag'] == 'offerForm'){
-        $name     = $_POST['name']?? '';
+    } else if (isset($_POST['flag']) && $_POST['flag'] == 'offerForm') {
+        $name     = $_POST['name'] ?? '';
         $phone    = $_POST['phone'] ?? '';
-        $email  = $_POST['email']?? '';
-        $offer = $_POST['offer']?? '';
-        $message = $_POST['message']?? '';
+        $email  = $_POST['email'] ?? '';
+        $offer = $_POST['offer'] ?? '';
+        $message = $_POST['message'] ?? '';
+    } else if (isset($_POST['flag']) && $_POST['flag'] == 'contactForm') {
+        $name     = $_POST['name'] ?? '';
+        $phone    = $_POST['phone'] ?? '';
+        $email  = $_POST['email'] ?? '';
+        $subject = $_POST['subject'] ?? '';
+        $message = $_POST['message'] ?? '';
     }
 
     try {
@@ -88,16 +94,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     'Message' => $message,
                 ];
                 break;
+            case 'contactForm':
+                $toEmail = 'avinash8564kumar@gmail.com';  // replace with your email if multiple recipients then add their emails sperate with comma
+                $fromEmail = 'avinash.mogulas@gmail.com'; // replace with your email
+                $fromName = 'Contact Enquiry in Mohali-Se';
+                $subject = 'New Contact Enquiry';
+                $fields = [
+                    'Name' => $name,
+                    'Phone' => $phone,
+                    'Email' => $email,
+                    'Subject' => $subject,
+                    'Message' => $message,
+                ];
+                break;
             default:
                 echo json_encode(['status' => 'error', 'message' => 'Invalid Form Submit Request']);
                 exit;
         }
 
-            $mail->setFrom($fromEmail, $fromName);
-            $mail->addAddress($toEmail);
+        $mail->setFrom($fromEmail, $fromName);
+        $mail->addAddress($toEmail);
 
         // if need to send multiple mails, just uncomment below line and add more recipient emails
-        
+
         // // Convert to array if needed
         // $toEmails = is_array($toEmail) ? $toEmail : explode(',', $toEmail);
 

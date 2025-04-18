@@ -9,42 +9,30 @@
 </head>
 
 <body>
-    <form id="offerForm" class="offerForm">
+    <form id="contactForm" class="contactForm">
         <label for="name">Name:</label><br />
         <input type="text" id="name" name="Name" placeholder="Enter Name"><br />
         <label for="phone">Phone:</label><br />
         <input type="tel" id="phone" name="Phone" placeholder="Enter Phone Number"><br />
         <label for="email">Email:</label><br />
         <input type="email" id="email" name="Email" placeholder="Enter Email"><br />
-        <label for="offer">Offer:</label><br />
-        <select id="offer" name="Offer">
-            <option value="">Select Offer</option>
-            <option value="10% off">10% Off</option>
-            <option value="20% off">20% Off</option>
-            <option value="30% off">30% Off</option>
-            <option value="40% off">40% Off</option>
-            <option value="50% off">50% Off</option>
-            <option value="60% off">60% Off</option>
-            <option value="70% off">70% Off</option>
-            <option value="80% off">80% Off</option>
-            <option value="90% off">90% Off</option>
-            <option value="100% off">100% Off</option>
-        </select><br />
+        <label for="subject">Subject:</label><br />
+        <input type="text" id="subject" name="Subject" placeholder="Enter Subject"><br />
         <label for="message">Message:</label><br />
         <textarea id="message" name="Message" placeholder="Enter Message"></textarea><br />
         <input type="text" id="q_date" name="Query Date" value="" placeholder="Enter Query Date"><br />
-        <input type="submit" value="Submit" id="offer_submit_btn" />
+        <input type="submit" value="Send Mesage" id="contact_submit_btn" />
     </form>
     <script>
         $(document).ready(function() {
-            let scriptUrl = "https://script.google.com/macros/s/AKfycbxht9px1e1z4LPFsNmgvLJLO3253-xHZETz1aMO8KzVzF8amvaUGvDGNftAbi31-kVC/exec";
-            let offerForm = document.forms["offerForm"];
-            offerForm.addEventListener("submit", (e) => {
+            let scriptUrl = "https://script.google.com/macros/s/AKfycby4Ef2XzH1XVQYSMMwA5MpIMCJrhXa5Zx1xl028WwGqV2B_yOgI-dCPzp1VdxKNE06vUA/exec";
+            let contactForm = document.forms["contactForm"];
+            contactForm.addEventListener("submit", (e) => {
                 e.preventDefault();
                 let name = $("#name").val();
                 let phone = $("#phone").val();
                 let email = $("#email").val();
-                let offer = $("#offer").val();
+                let subject = $("#subject").val();
                 let message = $("#message").val();
 
                 let nameRex = /^[a-zA-Z ]{2,50}$/;
@@ -72,8 +60,8 @@
                     alert("Invalid email please enter a valid email address");
                     return;
                 }
-                if (offer == "") {
-                    alert("Please select offer");
+                if (subject == "") {
+                    alert("Please enter subject");
                     return;
                 }
                 if (message == "") {
@@ -87,17 +75,23 @@
                 $("#q_date").attr("value", currentDate);
 
                 // Call your AJAX function here to send the form data to your PHP script
-                $("#offer_submit_btn").prop("disabled", true);
-                $("#offer_submit_btn").prop("value", "Submitting...");
-                sendOfferMail(name, phone, email, offer, message);
+                $("#contact_submit_btn").prop("disabled", true);
+                $("#contact_submit_btn").prop("value", "Sending...");
+                sendContactMail(name, phone, email, subject, message);
 
                 fetch(scriptUrl, {
                     method: "POST",
-                    body: new FormData(offerForm)
+                    body: new FormData(contactForm)
+                }).then(response => {
+                    console.log("Google script success");
+                }).catch(error => {
+                    console.error("Error from Google script:", error);
                 });
+
+                return false;
             });
 
-            function sendOfferMail(name, phone, email, offer, message) {
+            function sendContactMail(name, phone, email, subject, message) {
                 $.ajax({
                     type: "POST",
                     url: 'emailSend.php',
@@ -106,15 +100,15 @@
                         name: name,
                         phone: phone,
                         email: email,
-                        offer: offer,
+                        subject: subject,
                         message: message,
-                        flag: 'offerForm'
+                        flag: 'contactForm'
                     },
                     success: function(response) {
-                        $("#offer_submit_btn").prop("disabled", false);
-                        $("#offer_submit_btn").prop("value", "Submit");
-                        alert("Offer submitted successfully");
-                        offerForm.reset();
+                        $("#contact_submit_btn").prop("disabled", false);
+                        $("#contact_submit_btn").prop("value", "Send Message");
+                        alert("Contact submitted successfully");
+                        contactForm.reset();
                     },
                     error: function(xhr, status, error) {
                         alert("Error occurred while submitting offer: " + error);
