@@ -16,14 +16,32 @@ $("document").ready(function () {
     let RegEx = /^[a-zA-Z][a-zA-Z ]+$/;
     let RegPhNo = /^[0-9,()-]{1,50}$/;
 
-    if (
-      name == "" ||
-      phone == "" ||
-      rooms == "" ||
-      adults == "" ||
-      children == ""
-    ) {
-      alert("Please fill all required fields");
+    if (name == "") {
+      alert("Please enter your Name");
+      return;
+    }
+    if (checkin == "") {
+      alert("Please select check-in date");
+      return;
+    }
+    if (checkout == "") {
+      alert("Please select check-out date");
+      return;
+    }
+    if (phone == "") {
+      alert("Please enter your Phone Number");
+      return;
+    }
+    if (rooms == "") {
+      alert("Please enter the number of rooms");
+      return;
+    }
+    if (adults == "") {
+      alert("Please enter the number of adults");
+      return;
+    }
+    if (children == "") {
+      alert("Please enter the number of children");
       return;
     }
 

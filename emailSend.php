@@ -2,8 +2,13 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-// Server settings
-require('phpmailer/PHPMailerAutoload.php');
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'PHPMailer/src/Exception.php';
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $flag = $_POST['flag'] ?? '';
@@ -23,26 +28,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $people    = $_POST['people'] ?? '';
         $event_date   = $_POST['event_date'] ?? '';
         $message = $_POST['message'] ?? '';
-    }else if(isset($_POST['flag']) && $_POST['flag'] == 'offerForm'){
-        $name     = $_POST['name']?? '';
+    } else if (isset($_POST['flag']) && $_POST['flag'] == 'offerForm') {
+        $name     = $_POST['name'] ?? '';
         $phone    = $_POST['phone'] ?? '';
-        $email  = $_POST['email']?? '';
-        $offer = $_POST['offer']?? '';
-        $message = $_POST['message']?? '';
+        $email  = $_POST['email'] ?? '';
+        $offer = $_POST['offer'] ?? '';
+        $message = $_POST['message'] ?? '';
     }
+
+    $mail = new PHPMailer(true);
 
     try {
         // Server settings
-        $mail = new PHPMailer(); // create a new object
-        //$mail->IsSMTP(); // enable SMTP
-        $mail->SMTPDebug = 2; // debugging: 1 = errors and messages, 2 = messages only
-        //$mail->SMTPAuth = true; // authentication enabled
-        //$mail->SMTPSecure = 'tls'; // secure transfer enabled REQUIRED for Gmail
-        $mail->Host = "localhost";
-        $mail->Port = 25;
-        $mail->IsHTML(true);
-
-        // Sender & Receiver
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = 'avinash.mogulas@gmail.com';
+        $mail->Password   = 'npjvobfhyaryrrpg';
+        $mail->SMTPSecure = 'tls';
+        $mail->Port       = 587;
 
         switch ($flag) {
             case 'bookingEngine':
@@ -92,19 +96,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 echo json_encode(['status' => 'error', 'message' => 'Invalid Form Submit Request']);
                 exit;
         }
-
-            $mail->setFrom($fromEmail, $fromName);
-            $mail->addAddress($toEmail);
-
-        // if need to send multiple mails, just uncomment below line and add more recipient emails
-        
-        // // Convert to array if needed
-        // $toEmails = is_array($toEmail) ? $toEmail : explode(',', $toEmail);
-
-        // // Loop and add all addresses
-        // foreach ($toEmails as $email) {
-        //     $mail->addAddress(trim($email));
-        // }  
+        // Sender & Receiver
+        $mail->setFrom($fromEmail, $fromName);
+        $mail->addAddress($toEmail);
 
         // Email Content
         $mail->isHTML(true);
