@@ -3,7 +3,12 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 // Server settings
-require('phpmailer/PHPMailerAutoload.php');
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'PHPMailer/src/Exception.php';
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $flag = $_POST['flag'] ?? '';
@@ -41,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Server settings
         $mail = new PHPMailer(); // create a new object
         //$mail->IsSMTP(); // enable SMTP
-        $mail->SMTPDebug = 2; // debugging: 1 = errors and messages, 2 = messages only
+        // $mail->SMTPDebug = 2; // debugging: 1 = errors and messages, 2 = messages only
         //$mail->SMTPAuth = true; // authentication enabled
         //$mail->SMTPSecure = 'tls'; // secure transfer enabled REQUIRED for Gmail
         $mail->Host = "localhost";
@@ -52,8 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         switch ($flag) {
             case 'bookingEngine':
-                $toEmail = 'avinash8564kumar@gmail.com';  // replace with your email if multiple recipients then add their emails sperate with comma
-                $fromEmail = 'avinash.mogulas@gmail.com';  // replace with your email
+                $toEmail = 'dharam@internetmoguls.com';  // replace with your email if multiple recipients then add their emails sperate with comma
+                $fromEmail = 'info@manalise.com';  // replace with your email
                 $fromName = 'Booking Enquiry in Mohali-Se';
                 $subject = 'New Booking Enquiry';
                 $fields = [
@@ -67,8 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ];
                 break;
             case 'eventForm':
-                $toEmail = 'avinash8564kumar@gmail.com';  // replace with your email if multiple recipients then add their emails sperate with comma
-                $fromEmail = 'avinash.mogulas@gmail.com'; // replace with your email
+                $toEmail = 'dharam@internetmoguls.com';  // replace with your email if multiple recipients then add their emails sperate with comma
+                $fromEmail = 'info@manalise.com';  // replace with your email
                 $fromName = 'Event Enquiry in Mohali-Se';
                 $subject = 'New Event Enquiry';
                 $fields = [
@@ -82,8 +87,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ];
                 break;
             case 'offerForm':
-                $toEmail = 'avinash8564kumar@gmail.com';  // replace with your email if multiple recipients then add their emails sperate with comma
-                $fromEmail = 'avinash.mogulas@gmail.com'; // replace with your email
+                $toEmail = 'dharam@internetmoguls.com';  // replace with your email if multiple recipients then add their emails sperate with comma
+                $fromEmail = 'info@manalise.com';  // replace with your email
                 $fromName = 'Offer Enquiry in Mohali-Se';
                 $subject = 'New Offer Enquiry';
                 $fields = [
@@ -95,8 +100,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ];
                 break;
             case 'contactForm':
-                $toEmail = 'avinash8564kumar@gmail.com';  // replace with your email if multiple recipients then add their emails sperate with comma
-                $fromEmail = 'avinash.mogulas@gmail.com'; // replace with your email
+                $toEmail = 'dharam@internetmoguls.com';  // replace with your email if multiple recipients then add their emails sperate with comma
+                $fromEmail = 'info@manalise.com';  // replace with your email
                 $fromName = 'Contact Enquiry in Mohali-Se';
                 $subject = 'New Contact Enquiry';
                 $fields = [

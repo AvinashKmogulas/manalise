@@ -95,7 +95,7 @@ function sendBookingMail(
     success: function (response) {
       if (response.status === "success") {
         alert("Form submitted successfully!");
-        $("#bookinghotelform")[0].reset();
+        window.location.href = "https://be.aiosell.com/book/d6ba78d8bd";
       } else {
         alert("Mailer Error: " + response.message);
       }
